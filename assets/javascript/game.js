@@ -5,31 +5,31 @@ $(document).ready(function () {
             question: "In Ocarina of Time, who is the Sage of Light?",
             choice: ["Zelda", "Link", "Sheik", "Rauru"],
             answer: 3,
-            photo: "assets/images/rauru.png"
+            image: "assets/images/rauru.png"
         },
         {
             question: "Who is the main villain in Skyward Sword?",
             choice: ["Phi", "Vaati", "Ghirahim", "Gannon"],
             answer: 2,
-            photo: ""//find image
+            image: "assets/images/ghirahim.png"
         },
         {
             question: "In what year was Wind Waker first released?",
             choice: ["2001", "2002", "2003", "2004"],
             answer: 1,
-            photo: ""//find image
+            image: "assets/images/wind-waker.jpg"
         },
         {
             question: "In Twilight Princess, where does Link find the Golden Dayflies?",
             choice: ["Zora's Domain and Zora's River", "Kakariko Village and Graveyard", "Hyrule Feild south of Hyrule Castle Town", "Gerudo Desert Mesa"],
             answer: 3,
-            photo: ""//find image
+            image: "assets/images/link.png"
         },
         {
             question: "What is the name of the leader of the Bomber's in Majora's Mask?",
             choice: ["Jim", "Ivan", "Jun-Roberto", "Kafei"],
             answer: 0,
-            photo: ""//find image
+            image: "assets/images/jim.png"
         },
     ];
 
@@ -40,7 +40,7 @@ $(document).ready(function () {
     var intervalId;
     var userGuess = "";
     var running = false;
-    var qCount = questions.length;
+    var questionCounter = questions.length;
     var pick;
     var index;
     var newArray = [];
@@ -57,36 +57,8 @@ $(document).ready(function () {
             holder.push(questions[i]);
         }
     })
-    
-    //timer start
-    function runTimer() {
-        if (!running) {
-            intervalId = setInterval(decrement, 1000);
-            running = true;
-        }
-    }
 
-    //timer countdown
-    function decrement() {
-        $("#timeleft").html("<h3>Time remaining: " + timer + "</h3>");
-        timer--;
-
-        //stop timer if reach 0
-        if (timer === 0) {
-            unansweredCounter++;
-            stop();
-            $("#answerblock").html("<p>Time is up! The correct answer is: " + pick.choice[pick.answer] + "</p>");
-            hidepicture();
-        }
-    }
-
-    //timer stop
-    function stop() {
-        running = false;
-        clearInterval(intervalId);
-    }
-
-    //randomly pick question in array if not already shown
+    //randomly pick question in array 
     //display question and loop though and display possible answers
     function questionsDisplay() {
 
@@ -97,7 +69,7 @@ $(document).ready(function () {
         $("#questionblock").html("<h2>" + pick.question + "</h2>");
 
         for (var i = 0; i < pick.choice.length; i++) {
-            var userChoice = $("<div>");
+            var userChoice = $("<button>");
             userChoice.addClass("answerchoice");
             userChoice.html(pick.choice[i]);
             //assign array position to it so can check answer
@@ -130,18 +102,45 @@ $(document).ready(function () {
         })
     }
 
+    //timer start
+    function runTimer() {
+        if (!running) {
+            intervalId = setInterval(decrement, 1000);
+            running = true;
+        }
+    }
+
+    //timer countdown
+    function decrement() {
+        $("#timeleft").html("<h3>Time remaining: " + timer + "</h3>");
+        timer--;
+
+        //stop timer if reach 0
+        if (timer === 0) {
+            unansweredCounter++;
+            stop();
+            $("#answerblock").html("<p>Time is up! The correct answer is: " + pick.choice[pick.answer] + "</p>");
+            hidepicture();
+        }
+    }
+
+    //timer stop
+    function stop() {
+        running = false;
+        clearInterval(intervalId);
+    }
 
     function hidepicture() {
-        $("#answerblock").append("<img src=" + pick.photo + ">");
+        $("#answerblock").append("<img src=" + pick.image + ">");
         newArray.push(pick);
         questions.splice(index, 1);
 
-        var hidpic = setTimeout(function () {
+        hideimg = setTimeout(function () {
             $("#answerblock").empty();
             timer = 20;
 
             //run the score screen if all questions answered
-            if ((wrongAnswerCounter + correctAnswerCounter + unansweredCounter) === qCount) {
+            if ((wrongAnswerCounter + correctAnswerCounter + unansweredCounter) === questionCounter) {
                 $("#questionblock").empty();
                 $("#questionblock").html("<h3>Game Over!  Here's how you did: </h3>");
                 $("#answerblock").append("<h4> Correct: " + correctAnswerCounter + "</h4>");
@@ -155,11 +154,8 @@ $(document).ready(function () {
             } else {
                 runTimer();
                 questionsDisplay();
-
             }
         }, 3000);
-
-
     }
 
     $("#reset-game").on("click", function () {
@@ -171,7 +167,5 @@ $(document).ready(function () {
         }
         runTimer();
         questionsDisplay();
-
     })
-
 })

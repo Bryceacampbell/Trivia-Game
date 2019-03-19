@@ -5,13 +5,13 @@ $(document).ready(function () {
             question: "In Ocarina of Time, who is the Sage of Light?",
             choice: ["Zelda", "Link", "Sheik", "Rauru"],
             answer: 3,
-            image: "assets/images/rauru.png"
+            image: "assets/images/Rauru.png"
         },
         {
             question: "Who is the main villain in Skyward Sword?",
             choice: ["Phi", "Vaati", "Ghirahim", "Gannon"],
             answer: 2,
-            image: "assets/images/ghirahim.png"
+            image: "assets/images/Ghirahim.png"
         },
         {
             question: "In what year was Wind Waker first released?",
@@ -23,13 +23,13 @@ $(document).ready(function () {
             question: "In Twilight Princess, where does Link find the Golden Dayflies?",
             choice: ["Zora's Domain and Zora's River", "Kakariko Village and Graveyard", "Hyrule Feild south of Hyrule Castle Town", "Gerudo Desert Mesa"],
             answer: 3,
-            image: "assets/images/link.png"
+            image: "assets/images/Link.png"
         },
         {
             question: "What is the name of the leader of the Bomber's in Majora's Mask?",
             choice: ["Jim", "Ivan", "Jun-Roberto", "Kafei"],
             answer: 0,
-            image: "assets/images/jim.png"
+            image: "assets/images/Jim.png"
         },
     ];
 

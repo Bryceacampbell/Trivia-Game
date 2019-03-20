@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+    // Array of objects containing questions, choices, correct answer, and image urls
     var questions = [
         {
             question: "In Ocarina of Time, who is the Sage of Light?",
@@ -33,6 +34,7 @@ $(document).ready(function () {
         },
     ];
 
+    //global variables - to be used anywhere
     var correctAnswerCounter = 0;
     var wrongAnswerCounter = 0;
     var unansweredCounter = 0;
@@ -41,68 +43,71 @@ $(document).ready(function () {
     var userGuess = "";
     var running = false;
     var questionCounter = questions.length;
-    var pick;
-    var index;
-    var newArray = [];
-    var holder = [];
+    var questionSelected;
+    var currentQuestion;
+    var finishedQuestionsArray = [];
+    var holderArray = [];
 
+    //hide reset button at document on ready
     $("#reset-game").hide();
+    $(".container").addClass("container-clear");
 
     //click start button to start game
     $("#start-game").on("click", function () {
         $("#start-game").hide();
+        $(".container").removeClass("container-clear");
         questionsDisplay();
         runTimer();
         for (var i = 0; i < questions.length; i++) {
-            holder.push(questions[i]);
+            holderArray.push(questions[i]);
         }
     })
 
-    //randomly pick question in array 
-    //display question and loop though and display possible answers
+
+    //function to display question and all possible choices
     function questionsDisplay() {
 
-        index = Math.floor(Math.random() * questions.length);
-        pick = questions[index];
+        //math function to choose random question out of questions array
+        currentQuestion = Math.floor(Math.random() * questions.length);
+        questionSelected = questions[currentQuestion];
 
-        //iterate through answer array and display
-        $("#questionblock").html("<h2>" + pick.question + "</h2>");
+        //display selected question
+        $("#questionblock").html("<h2>" + questionSelected.question + "</h2>");
 
-        for (var i = 0; i < pick.choice.length; i++) {
+        //for loop to display possible choices
+        for (var i = 0; i < questionSelected.choice.length; i++) {
             var userChoice = $("<button>");
             userChoice.addClass("answerchoice");
-            userChoice.html(pick.choice[i]);
-            //assign array position to it so can check answer
+            userChoice.html(questionSelected.choice[i]);
             userChoice.attr("data-guessvalue", i);
             $("#answerblock").append(userChoice);
-
         }
 
-        //click function to select answer and outcomes
+        //click function to select answer and run outc
         $(".answerchoice").on("click", function () {
 
             //grab array position from userGuess
             userGuess = parseInt($(this).attr("data-guessvalue"));
 
-            //correct guess or wrong guess outcomes
-            if (userGuess === pick.answer) {
+            //if userguess is equal to correct answer, run stop function and
+            if (userGuess === questionSelected.answer) {
                 stop();
                 correctAnswerCounter++;
                 userGuess = "";
                 $("#answerblock").html("<p>Correct!</p>");
-                hidepicture();
-
-            } else {
+                outcome();  
+            } 
+            else {
                 stop();
                 wrongAnswerCounter++;
                 userGuess = "";
-                $("#answerblock").html("<p>Wrong! The correct answer is: " + pick.choice[pick.answer] + "</p>");
-                hidepicture();
+                $("#answerblock").html("<p>Wrong! The correct answer is: " + questionSelected.choice[questionSelected.answer] + "</p>");
+                outcome();
             }
         })
     }
 
-    //timer start
+    //starts the timer and decrement by 1 every second
     function runTimer() {
         if (!running) {
             intervalId = setInterval(decrement, 1000);
@@ -110,39 +115,44 @@ $(document).ready(function () {
         }
     }
 
-    //timer countdown
+    //function to display timer countdown
     function decrement() {
         $("#timeleft").html("<h3>Time remaining: " + timer + "</h3>");
         timer--;
 
-        //stop timer if reach 0
+        //if timer reaches 0, stop timer
         if (timer === 0) {
             unansweredCounter++;
             stop();
-            $("#answerblock").html("<p>Time is up! The correct answer is: " + pick.choice[pick.answer] + "</p>");
-            hidepicture();
+            $("#answerblock").html("<p>Time is up! The correct answer is: " + questionSelected.choice[questionSelected.answer] + "</p>");
+            outcome();
         }
     }
 
-    //timer stop
+    //stop the time
     function stop() {
         running = false;
         clearInterval(intervalId);
     }
 
-    function hidepicture() {
-        $("#answerblock").append("<img src=" + pick.image + ">");
-        newArray.push(pick);
-        questions.splice(index, 1);
+    //function to display images and splice the question selected out of the array so it wont be used again
+    function outcome() {
+        $("#answerblock").append("<img src=" + questionSelected.image + ">");
 
-        hideimg = setTimeout(function () {
+        //pushing question selected into a new array
+        finishedQuestionsArray.push(questionSelected);
+
+        //splice then removes it out of the inital array 
+        questions.splice(currentQuestion, 1);
+
+            setTimeout(function () {
             $("#answerblock").empty();
             timer = 20;
-
+    
             //run the score screen if all questions answered
             if ((wrongAnswerCounter + correctAnswerCounter + unansweredCounter) === questionCounter) {
                 $("#questionblock").empty();
-                $("#questionblock").html("<h3>Game Over!  Here's how you did: </h3>");
+                $("#questionblock").html("<h3>Game Over!  Here's your results: </h3>");
                 $("#answerblock").append("<h4> Correct: " + correctAnswerCounter + "</h4>");
                 $("#answerblock").append("<h4> Incorrect: " + wrongAnswerCounter + "</h4>");
                 $("#answerblock").append("<h4> Unanswered: " + unansweredCounter + "</h4>");
@@ -151,19 +161,21 @@ $(document).ready(function () {
                 wrongAnswerCounter = 0;
                 unansweredCounter = 0;
 
-            } else {
+            } 
+            else {
                 runTimer();
                 questionsDisplay();
             }
         }, 3000);
     }
 
+    //reset game on click function to reset the game
     $("#reset-game").on("click", function () {
         $("#reset-game").hide();
         $("#answerblock").empty();
         $("#questionblock").empty();
-        for (var i = 0; i < holder.length; i++) {
-            questions.push(holder[i]);
+        for (var i = 0; i < holderArray.length; i++) {
+            questions.push(holderArray[i]);
         }
         runTimer();
         questionsDisplay();

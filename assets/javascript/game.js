@@ -1,5 +1,14 @@
 $(document).ready(function () {
 
+        //global variables - to be used anywhere...mehhh need to use less global variable for best practices
+        var correctAnswerCounter = 0;
+        var wrongAnswerCounter = 0;
+        var unansweredCounter = 0;
+        var timer = 20;
+        var intervalId;
+        var userGuess = "";
+        var running = false;
+
     // Array of objects containing questions, choices, correct answer, and image urls
     var questions = [
         {
@@ -64,15 +73,6 @@ $(document).ready(function () {
         }
     ];
 
-    //global variables - to be used anywhere...mehhh need to use less global variable for best practices
-    var correctAnswerCounter = 0;
-    var wrongAnswerCounter = 0;
-    var unansweredCounter = 0;
-    var timer = 20;
-    var intervalId;
-    var userGuess = "";
-    var running = false;
-
     //more global variables for manipulating the questions array and splice them out and into new arrays
     var questionCounter = questions.length;
     var questionSelected;
@@ -83,12 +83,14 @@ $(document).ready(function () {
     //hide reset button at document on ready
     $("#reset-game").hide();
     $(".container").addClass("container-clear");
+    $("#time-remaining").hide();
 
 
     //click start button to start game
     $("#start-game").on("click", function () {
         $("#start-game").hide();
         $(".container").removeClass("container-clear");
+        $("#time-remaining").show();
         questionsDisplay();
         runTimer();
         for (var i = 0; i < questions.length; i++) {

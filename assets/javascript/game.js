@@ -1,14 +1,5 @@
 $(document).ready(function () {
 
-    //global variables - to be used anywhere...mehhh need to use less global variable for best practices
-    var correctAnswerCounter = 0;
-    var wrongAnswerCounter = 0;
-    var unansweredCounter = 0;
-    var timer = 20;
-    var intervalId;
-    var userGuess = "";
-    var running = false;
-
     // Array of objects containing questions, choices, correct answer, and image urls
     var questions = [
         {
@@ -72,6 +63,15 @@ $(document).ready(function () {
             image: "assets/images/master-sword.png"
         },
     ];
+
+    //global variables - to be used anywhere...mehhh need to use less global variable for best practices
+    var correctAnswerCounter = 0;
+    var wrongAnswerCounter = 0;
+    var unansweredCounter = 0;
+    var timer = 20;
+    var intervalId;
+    var userGuess = "";
+    var running = false;
 
     //more global variables for manipulating the questions array and splice them out and into new arrays
     var questionCounter = questions.length;

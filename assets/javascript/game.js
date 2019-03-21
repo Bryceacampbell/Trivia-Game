@@ -61,7 +61,7 @@ $(document).ready(function () {
             choice: ["Death Mountain", "Links House", "The Pyramid of Power", "The Lost Woods"],
             answer: 3,
             image: "assets/images/master-sword.png"
-        },
+        }
     ];
 
     //global variables - to be used anywhere...mehhh need to use less global variable for best practices
